@@ -20,10 +20,6 @@ const News = (props) => {
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
 
-    // document.title = `${props.category === 'general' ? "News Monkey - get the latest news for free" : captializeFirstLetter(props.category)} latest news - NewsMonkey`
-
-
-
     const updateNews = async () => {
         props.setProgress(24)
         const url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=${props.apiKey}&page=${page}&pageSize=${props.pageSize}`;
@@ -42,13 +38,14 @@ const News = (props) => {
     }
 
     useEffect(() => {
-
+        document.title = `${props.category === 'general' ? "News Monkey - get the latest news for free" : captializeFirstLetter(props.category)} latest news - NewsMonkey`
         updateNews()
+        // eslint-disable-next-line
     }, [])
 
     const fetchMoreData = async () => {
         setPage(page + 1)
-        const url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=${props.apiKey}&page=${page}&pageSize=${props.pageSize}`;
+        const url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=${props.apiKey}&page=${page + 1}&pageSize=${props.pageSize}`;
         let data = await fetch(url);
         let parsedData = await data.json();
 
@@ -58,7 +55,7 @@ const News = (props) => {
     return (
         <>
             <div className="container my-3">
-                <h2 className='my-3 fontSensSerif'> NewsMonkey - Top {captializeFirstLetter(props.category)} headlines </h2>
+                <h2 className='my-3 fontSensSerif' style={{ paddingTop: '2em' }}> NewsMonkey - Top {captializeFirstLetter(props.category)} headlines </h2>
                 {loading && <Spinner />}
                 <InfiniteScroll
                     dataLength={articles.length}
